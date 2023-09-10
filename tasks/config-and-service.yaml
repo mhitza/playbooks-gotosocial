@@ -1,0 +1,18 @@
+- name: generate config.yaml
+  tags: print_action
+  copy:
+    dest: "{{ deploy_dir }}/config.yaml"
+    content: "{{ merged_config_entries | to_yaml() }}"
+    owner: gotosocial
+
+- name: generate gotosocial.service
+  tags: print_action
+  template:
+    src: templates/gotosocial.service.j2
+    dest: /etc/systemd/system/gotosocial.service
+  register: service
+
+- when: service.changed
+  tags: print_action
+  systemd:
+    daemon_reload: true

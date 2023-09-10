@@ -1,0 +1,13 @@
+- name: copy release on server
+  tags: print_action
+  copy:
+    src: "{{ playbook_dir }}/local/cache/{{ release_file }}"
+    dest: "/opt/{{ release_file }}"
+
+- name: "unpack release into {{ deploy_dir }}"
+  tags: print_action
+  unarchive:
+    remote_src: yes
+    src: "/opt/{{ release_file }}"
+    dest: "{{ deploy_dir }}"
+    owner: gotosocial

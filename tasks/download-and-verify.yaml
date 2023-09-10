@@ -1,0 +1,21 @@
+- delegate_to: localhost
+  tags: print_action
+  block:
+    - name: "download {{ release_version }} release assets"
+      get_url:
+        url: "{{ release_path }}/{{ item }}"
+        dest: "{{ playbook_dir }}/local/cache/{{ item }}"
+      loop:
+        - "{{ release_file }}"
+        - checksums.txt
+      register: downloads
+      become: false
+
+    - name: validate checksum
+      command: sha256sum -c checksums.txt
+      args:
+        chdir: "{{ playbook_dir }}/local/cache"
+      register: checksum
+      failed_when: "checksum.stdout.find(release_file ~ ': OK') == -1"
+      changed_when: false
+      become: false

@@ -1,0 +1,7 @@
+- when: release_version is not defined
+  fail:
+    msg: release_version is not defined
+
+- when: deploy_dir is not defined
+  fail:
+    msg: deploy_dir is not defined

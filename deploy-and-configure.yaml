@@ -1,0 +1,31 @@
+- hosts: gotosocial
+  become: true
+  tasks:
+    - include_tasks: tasks/check-vars.yaml
+
+    - include_tasks: tasks/download-and-verify.yaml
+
+    - name: "SELinux label binary {{ binary_path }}"
+      tags: print_action
+      when: ansible_os_family == "RedHat"
+      sefcontext:
+        target: "{{ binary_path }}"
+        setype: bin_t
+        state: present
+
+    - name: create gotosocial user
+      tags: print_action
+      user:
+        name: gotosocial
+        state: present
+        create_home: false
+
+    - include_tasks: tasks/upload-and-unpack.yaml
+
+    - include_tasks: tasks/config-and-service.yaml
+
+    - name: start gotosocial
+      service:
+        name: gotosocial
+        state: started
+        enabled: yes

@@ -1,0 +1,34 @@
+- hosts: gotosocial
+  become: true
+  vars:
+    sqlite_file_path: "{{ merged_config_entries['db-address'] }}"
+  vars_prompt:
+    - name: stop_server
+      prompt: Stop server while backing up the database?
+      default: no
+      private: no
+  tasks:
+    - when: stop_server|bool
+      tags: print_action
+      service: name=gotosocial state=stopped
+
+    - block:
+      - name: download database files
+        tags: print_action
+        fetch:
+          src: "{{ deploy_dir }}/{{ item.file }}"
+          dest: "{{ playbook_dir }}/local/backup/{{ item.file }}"
+          flat: yes
+          fail_on_missing: "{{ item.fail_on_missing }}"
+        loop:
+          - file: "{{ sqlite_file_path }}"
+            fail_on_missing: yes
+          - file: "{{ sqlite_file_path}}-shm"
+            fail_on_missing: "{{ not stop_server|bool }}"
+          - file: "{{ sqlite_file_path}}-wal"
+            fail_on_missing: "{{ not stop_server|bool }}"
+        become: false
+      always:
+      - when: stop_server|bool
+        tags: print_action
+        service: name=gotosocial state=started
