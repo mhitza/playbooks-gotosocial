@@ -4,7 +4,7 @@
     - name: "download {{ release_version }} release assets"
       get_url:
         url: "{{ release_path }}/{{ item }}"
-        dest: "{{ playbook_dir }}/local/cache/{{ item }}"
+        dest: "{{ local_dir }}/cache/{{ item }}"
       loop:
         - "{{ release_file }}"
         - checksums.txt
@@ -14,7 +14,7 @@
     - name: validate checksum
       command: sha256sum -c checksums.txt
       args:
-        chdir: "{{ playbook_dir }}/local/cache"
+        chdir: "{{ local_dir }}/cache"
       register: checksum
       failed_when: "checksum.stdout.find(release_file ~ ': OK') == -1"
       changed_when: false

@@ -1,5 +1,7 @@
 - hosts: gotosocial
   become: true
+  vars_files:
+    - vars/defaults.yaml
   vars:
     sqlite_file_path: "{{ merged_config_entries['db-address'] }}"
   vars_prompt:
@@ -17,7 +19,7 @@
         tags: print_action
         fetch:
           src: "{{ deploy_dir }}/{{ item.file }}"
-          dest: "{{ playbook_dir }}/local/backup/{{ item.file }}"
+          dest: "{{ local_dir }}/backup/{{ item.file }}"
           flat: yes
           fail_on_missing: "{{ item.fail_on_missing }}"
         loop:

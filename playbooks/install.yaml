@@ -1,11 +1,13 @@
 - hosts: gotosocial
   become: true
+  vars_files:
+    - vars/defaults.yaml
   tasks:
     - include_tasks: tasks/check-vars.yaml
 
     - include_tasks: tasks/download-and-verify.yaml
 
-    - name: "SELinux label binary {{ binary_path }}"
+    - name: "SELinux label binary path {{ binary_path }}"
       tags: print_action
       when: ansible_os_family == "RedHat"
       sefcontext:
@@ -25,7 +27,16 @@
     - include_tasks: tasks/config-and-service.yaml
 
     - name: start gotosocial
+      tags: print_action
       service:
         name: gotosocial
         state: started
         enabled: yes
+      register: started
+
+    - name: restart gotosocial
+      tags: print_action
+      service:
+        name: gotosocial
+        state: restarted
+      when: not started.changed

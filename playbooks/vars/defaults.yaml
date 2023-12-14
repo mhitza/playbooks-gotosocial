@@ -1,6 +1,7 @@
 release_path: "https://github.com/superseriousbusiness/gotosocial/releases/download/v{{ release_version }}"
 release_file: "gotosocial_{{ release_version }}_linux_amd64.tar.gz"
 binary_path: "{{ deploy_dir }}/gotosocial"
+local_dir: "{{ playbook_dir }}/../local"
 default_config_entries:
   storage-local-base-bath: "{{ deploy_dir }}/storage"
   letsencrypt-cert-dir: "{{ deploy_dir }}/storage/certs"

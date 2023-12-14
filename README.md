@@ -11,11 +11,11 @@ For fewer flags on the cli I suggest defining the inventory entry for your insta
 ```yaml
 all:
   hosts:
-    gotosocial: # gotosocial must be the inventory item name
+    gotosocial: # gotosocial must be the inventory host name or group name
         ansible_host: 10.0.0.1
         ansible_ssh_user: my_user
         # The following two variables are mandatory
-        release_version: '0.11.1'
+        release_version: '0.12.2'
         deploy_dir: /gotosocial
         # For each property in the configuration file you can make your own entry
         # within the following map. At the very least you'd want to define your
@@ -25,9 +25,9 @@ all:
 ```
 
 ```shell
-ansible-playbook deploy-and-configure.yaml
+make install
 ```
 
 ```shell
-ansible-playbook backup.yaml
+make backup
 ```
