@@ -1,0 +1,31 @@
+- hosts: gotosocial
+  become: true
+  vars_files:
+    - vars/defaults.yaml
+    - vars/migration.yaml
+  tasks:
+    - include_tasks: tasks/download-and-verify.yaml
+
+    - name: stop gotosocial
+      tags: print_action
+      service:
+        name: gotosocial
+        state: stopped
+        enabled: yes
+
+    - include_tasks: tasks/upload-and-unpack.yaml
+
+    - include_tasks: tasks/config-and-service.yaml
+
+    - name: start gotosocial
+      tags: print_action
+      service:
+        name: gotosocial
+        state: started
+        enabled: yes
+
+    - copy:
+        content: "\n{{ migration_notes[release_version].notice|indent(4, True) }}"
+        dest: "{{ local_dir }}/cache/migration_notes.txt"
+      delegate_to: localhost
+      become: false

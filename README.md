@@ -21,7 +21,16 @@ all:
         # within the following map. At the very least you'd want to define your
         # domain name using the host property.
         config_entries:
-            host: example.com
+          host: example.com
+          # PROJECT DEFAULTS
+          # storage-local-base-bath: "{{ deploy_dir }}/storage"
+          # letsencrypt-cert-dir: "{{ deploy_dir }}/storage/certs"
+          # log-client-ip: false
+          # letsencrypt-enabled: true
+          # accounts-registration-open: false
+          # port: 443
+          # db-type: sqlite
+          # db-address: sqlite.db
 ```
 
 ```shell

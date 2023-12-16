@@ -1,0 +1,10 @@
+migration_notes:
+  0.13.0:
+    notice: |
+      This release contains several database migrations which will run the first time you start up this
+      new version. Be sure not to interrupt this migration process. This will take anywhere between a couple
+      seconds and ten minutes (on slower hardware). Please be patient!
+
+      Tail gotosocial logs:
+
+          ssh {{ ansible_ssh_user }}@{{ ansible_host }} journalctl -fu gotosocial
