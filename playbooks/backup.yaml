@@ -30,6 +30,26 @@
           - file: "{{ sqlite_file_path}}-wal"
             fail_on_missing: "{{ not stop_server|bool }}"
         become: false
+
+      - name: archive storage/ directory
+        tags: print_action
+        archive:
+          path: "{{ deploy_dir }}/storage"
+          dest: "{{ deploy_dir }}/storage.tgz"
+
+      - name: download storage archive
+        tags: print_action
+        fetch:
+          src: "{{ deploy_dir }}/storage.tgz"
+          dest: "{{ local_dir }}/backup/storage.tgz"
+          flat: yes
+        become: false
+
+      - name: remove storage archive
+        file:
+          path: "{{ deploy_dir }}/storage.tgz"
+          state: absent
+
       always:
       - when: stop_server|bool
         tags: print_action
