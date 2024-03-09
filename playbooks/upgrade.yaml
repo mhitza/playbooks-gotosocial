@@ -25,7 +25,7 @@
         enabled: yes
 
     - copy:
-        content: "\n{{ migration_notes[release_version].notice|indent(4, True) }}"
+        content: "\n{{ migration_notes[release_version].notice|default('')|indent(4, True) }}"
         dest: "{{ local_dir }}/cache/migration_notes.txt"
       delegate_to: localhost
       become: false

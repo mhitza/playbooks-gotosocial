@@ -15,7 +15,7 @@ all:
         ansible_host: 10.0.0.1
         ansible_ssh_user: my_user
         # The following two variables are mandatory
-        release_version: '0.12.2'
+        release_version: '0.14.1'
         deploy_dir: /gotosocial
         # For each property in the configuration file you can make your own entry
         # within the following map. At the very least you'd want to define your
