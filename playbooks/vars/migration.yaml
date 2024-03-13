@@ -1,5 +1,5 @@
 migration_notes:
-  0.14.1:
+  0.14.2:
   0.13.0:
     notice: |
       This release contains several database migrations which will run the first time you start up this
