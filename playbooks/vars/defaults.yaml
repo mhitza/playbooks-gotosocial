@@ -1,4 +1,4 @@
-release_path: "https://github.com/superseriousbusiness/gotosocial/releases/download/v{{ release_version }}"
+release_path: "https://codeberg.org/superseriousbusiness/gotosocial/releases/download/v{{ release_version }}"
 release_file: "gotosocial_{{ release_version }}_linux_amd64.tar.gz"
 binary_path: "{{ deploy_dir }}/gotosocial"
 local_dir: "{{ playbook_dir }}/../local"
