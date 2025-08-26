@@ -7,13 +7,20 @@
 
     - include_tasks: tasks/download-and-verify.yaml
 
-    - name: "SELinux label binary path {{ binary_path }}"
-      tags: print_action
-      when: ansible_os_family == "RedHat"
-      sefcontext:
-        target: "{{ binary_path }}"
-        setype: bin_t
-        state: present
+    - when: ansible_selinux.status == "enabled"
+      block:
+        - when: ansible_os_family == "RedHat"
+          package:
+            name: policycoreutils-python-utils
+            state: present
+
+        - name: "SELinux label binary path {{ binary_path }}"
+          tags: print_action
+          when: ansible_os_family == "RedHat"
+          sefcontext:
+            target: "{{ binary_path }}"
+            setype: bin_t
+            state: present
 
     - name: create gotosocial user
       tags: print_action

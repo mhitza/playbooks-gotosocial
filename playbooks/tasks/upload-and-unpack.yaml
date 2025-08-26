@@ -4,6 +4,11 @@
     src: "{{ local_dir }}/cache/{{ release_file }}"
     dest: "/opt/{{ release_file }}"
 
+- name: ensure target directory exists
+  file:
+    path: "{{ deploy_dir }}"
+    state: directory
+
 - name: "unpack release into {{ deploy_dir }}"
   tags: print_action
   unarchive:
