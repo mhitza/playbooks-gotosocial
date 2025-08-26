@@ -4,14 +4,8 @@
     - vars/defaults.yaml
   vars:
     sqlite_file_path: "{{ merged_config_entries['db-address'] }}"
-  vars_prompt:
-    - name: stop_server
-      prompt: Stop server while backing up the database?
-      default: no
-      private: no
   tasks:
-    - when: stop_server|bool
-      tags: print_action
+    - tags: print_action
       service: name=gotosocial state=stopped
 
     - block:
@@ -25,10 +19,6 @@
         loop:
           - file: "{{ sqlite_file_path }}"
             fail_on_missing: yes
-          - file: "{{ sqlite_file_path}}-shm"
-            fail_on_missing: "{{ not stop_server|bool }}"
-          - file: "{{ sqlite_file_path}}-wal"
-            fail_on_missing: "{{ not stop_server|bool }}"
         become: false
 
       - name: archive storage/ directory
@@ -51,6 +41,5 @@
           state: absent
 
       always:
-      - when: stop_server|bool
-        tags: print_action
+      - tags: print_action
         service: name=gotosocial state=started

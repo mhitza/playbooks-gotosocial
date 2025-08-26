@@ -8,7 +8,7 @@ Group=gotosocial
 Type=exec
 Restart=on-failure
 
-ExecStart={{ deploy_dir }}/gotosocial --config-path config.yaml server start
+ExecStart={{ deploy_dir }}/gotosocial server --config-path config.yaml start
 WorkingDirectory={{ deploy_dir }}
 
 # Sandboxing options to harden security

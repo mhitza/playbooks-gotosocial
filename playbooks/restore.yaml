@@ -1,0 +1,40 @@
+- hosts: gotosocial
+  become: true
+  vars_files:
+    - vars/defaults.yaml
+  vars:
+    sqlite_file_path: "{{ merged_config_entries['db-address'] }}"
+  tasks:
+    - name: stop gotosocial service
+      tags: print_action
+      service: name=gotosocial state=stopped
+
+    - block:
+      - name: upload database files
+        tags: print_action
+        copy:
+          src: "{{ local_dir }}/backup/{{ item.file }}"
+          dest: "{{ deploy_dir }}/{{ item.file }}"
+          owner: gotosocial
+        loop:
+          - file: "{{ sqlite_file_path }}"
+            fail_on_missing: yes
+
+      - name: upload storage archive
+        tags: print_action
+        copy:
+          src: "{{ local_dir }}/backup/storage.tgz"
+          dest: "{{ deploy_dir }}/storage.tgz"
+
+      - name: unpack storage archive
+        tags: print_action
+        unarchive:
+          src: "{{ deploy_dir }}/storage.tgz"
+          dest: "{{ deploy_dir }}"
+          remote_src: yes
+          owner: gotosocial
+
+      always:
+      - name: starting back up gotosocial service
+        tags: print_action
+        service: name=gotosocial state=started
