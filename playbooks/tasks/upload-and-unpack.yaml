@@ -16,3 +16,6 @@
     src: "/opt/{{ release_file }}"
     dest: "{{ deploy_dir }}"
     owner: gotosocial
+
+- name: "restore SELinux context for binary"
+  command: "restorecon {{ deploy_dir }}/gotosocial"
